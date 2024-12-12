@@ -66,10 +66,12 @@ for code in syll_codes:
                'P8' : [],
                'P9' : []}
     paper_type = 1
-    os.mkdir(new_dir)
+    if not os.path.isdir(new_dir):
+        os.mkdir(new_dir)
     for file in pdf_filenames:
         if file[:4] == code:
-            shutil.move(orig_dir+'/'+file, new_dir)
+            if not os.path.isfile(new_dir+'/'+file):
+                shutil.move(orig_dir+'/'+file, new_dir)
             code_pdfs.append(file)
     for file in code_pdfs:
         paper_type = file[12]
@@ -79,15 +81,19 @@ for code in syll_codes:
     for paper in p_files:
         if p_files[paper] != []:
             new_dir = orig_dir+'/'+code+'/'+paper
-            os.mkdir(new_dir)
+            if not os.path.isdir(new_dir):
+                os.mkdir(new_dir)
             for file in p_files[paper]:
-                shutil.move(orig_dir+'/'+code+'/'+file, new_dir)
+                if not os.path.isfile(new_dir+'/'+file):
+                    shutil.move(orig_dir+'/'+code+'/'+file, new_dir)
                 year = file[6:8]
                 if year not in years:
                     years.append(year)
             for year in years:
                 new_dir = orig_dir+'/'+code+'/'+paper+'/20'+year
-                os.mkdir(new_dir)
+                if not os.path.isdir(new_dir):
+                    os.mkdir(new_dir)
             for file in p_files[paper]:
                 year = file[6:8]
-                shutil.move(orig_dir+'/'+code+'/'+paper+'/'+file, orig_dir+'/'+code+'/'+paper+'/20'+year)
+                if not os.path.isfile(orig_dir+'/'+code+'/'+paper+'/20'+year+'/'+file):
+                    shutil.move(orig_dir+'/'+code+'/'+paper+'/'+file, orig_dir+'/'+code+'/'+paper+'/20'+year)
